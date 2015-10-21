@@ -54,9 +54,10 @@ A Wildfly 8.2 project for Entreprise integration
  </module>
  ```
   
-* Ajouter de la configuration Standalone WildFly
-	** déclarer la connexion dans le subsystem resource-adapters.
-```xml
+## Ajouter de la configuration Standalone WildFly
+- déclarer la connexion dans le subsystem resource-adapters.
+
+```xml 
 <subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
 	<resource-adapters>
 		<resource-adapter id="activemq-rar-5.11.1.rar">
@@ -88,10 +89,12 @@ A Wildfly 8.2 project for Entreprise integration
 		</resource-adapter>
 	</resource-adapters>
 </subsystem>
-	```	
+```	
 
 - creation de queues
-Commande JBOSS CLI !!!! TODO
+```javascript
+	Commande JBOSS CLI !!!! TODO
+```
 
 - Ajouter le queue d'echange avec ActiveMQ et un Bridge pour eviter de modifier les MDB
 ```xml
