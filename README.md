@@ -91,7 +91,7 @@ A Wildfly 8.2 project for Entreprise integration
 </subsystem>
 ```	
 
-- creation de queues
+- Creation des queues JMS
 ```javascript
 	Commande JBOSS CLI !!!! TODO
 ```
@@ -130,7 +130,7 @@ A Wildfly 8.2 project for Entreprise integration
 </jms-bridge> 
 ```
 
-## lancement de Broker ActiveMQ
+## Lancement de Broker ActiveMQ
 	- Telecharger le bin activemq 5.12
 	- Extraire le contenu dans un dossier de travail
 	- Lancement de broker  %AMQ_DIR%/bin/activemq.bat start
