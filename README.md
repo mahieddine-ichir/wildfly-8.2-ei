@@ -1,4 +1,4 @@
-############# wildfly-8.2-ei
+# wildfly-8.2-ei
 #How to Use Out of Process ActiveMQ with WildFly
 This document explains how to use an out of process ActiveMQ to send and receive JMS messages inside WildFly Application Server.
 
@@ -10,16 +10,16 @@ ActiveMQ Resource Adaptater (RA) must be included and configured in WildFly appl
 - Download ActiveMQ resource adapter from http://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/5.11.1/activemq-rar-5.11.1.rar
 - Create a JBoss module containing the RA code.
 - Create the folder:`$JBOSS_HOME/modules/system/layers/base/org/apache/activemq/main/`
-	```
+```
 	mkdir  -p $JBOSS_HOME/modules/org/apache/activemq/main/  
-	```
+```
 - Copy all unpacked files of resource adapter to that folder, including the META-INF/ra.xml file.
-	```
+```
 	cd modules/org/apache/activemq/main/  
 	wget http://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/5.11.1/activemq-rar-5.11.1.rar  
 	unzip activemq-rar-5.11.1.rar  
-	```
-	>The RAR archive contains many jars that are required to run ActiveMQ RA. It also contains the RA definition in META-INF/ra.xml
+```
+> The RAR archive contains many jars that are required to run ActiveMQ RA. It also contains the RA definition in META-INF/ra.xml
 	
 - Add module.xml file to the same folder with the following content:
 ```xml
@@ -101,7 +101,7 @@ Once the org.apache.activemq module has been created, the WildFly standalone con
 		</resource-adapter>
 	</resource-adapters>
 </subsystem>
-	```	
+```	
 
 - Create Queues JMS
 Command JBOSS CLI !!!! TODO
@@ -146,15 +146,14 @@ This queue has two JNDI names, to allow it to be accessed both internally (by th
 </jms-bridge> 
 ```
 
-- Start JBoss AS with command
+- Start JBoss AS with command:
 ``` 	bin/standalone.sh -c standalone-full.xml ```
 
 ## ActiveMQ as an external messaging broker
 
-	- Download Apache ActiveMQ from 5.12 http://activemq.apache.org/activemq-5121-release.html
-	- Unpack the downloaded package
-	- Start the broker with
-	%AMQ_DIR%/bin/activemq.bat start
+- Download Apache ActiveMQ from 5.12 http://activemq.apache.org/activemq-5121-release.html
+- Unpack the downloaded package
+- Start the broker with: ```%AMQ_DIR%/bin/activemq.bat start ```
 	
 	
 ## Configure JCA endpoint for MDB !!!
