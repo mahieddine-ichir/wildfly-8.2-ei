@@ -133,4 +133,4 @@ A Wildfly 8.2 project for Entreprise integration
 ## Lancement de Broker ActiveMQ
 	- Telecharger le bin activemq 5.12
 	- Extraire le contenu dans un dossier de travail
-	- Lancement de broker  %AMQ_DIR%/bin/activemq.bat start
+	- Lancement de broker `%AMQ_DIR%/bin/activemq.bat start`
