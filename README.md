@@ -2,18 +2,18 @@
 A Wildfly 8.2 project for Entreprise integration
 
 
-1/ Installer un broker externe ActiveMQ RA
+## Installer un broker externe ActiveMQ RA
 
 - Télécharger le resource adapter d'ActiveMQ (version 5.11.1) et l'installer comme module dans WildFly
 - Creation du dossier $JBOSS_HOME/modules/system/layers/base/org/apache/activemq/main/
 - Copier le contenu de fichier rar dans le nouveau dossier
 	unzip activemq-rar-5.11.1.rar
-	** ce fichier rar contiens les differants jars pour le fonctionnement d'ActiveMQ RA
+.. ce fichier rar contiens les differants jars pour le fonctionnement d'ActiveMQ RA
 
 - Creation d'un fichier module.xml qui liste les differants fichiers contenu dans le dossier main.
 
-<module xmlns="urn:jboss:module:1.3" name="org.apache.activemq" slot="main" >
-    <resources>
+` <module xmlns="urn:jboss:module:1.3" name="org.apache.activemq" slot="main" >
+     <resources>
         <resource-root path="."/>
         <resource-root path="activemq-broker-5.11.1.jar"/>
         <resource-root path="activemq-client-5.11.1.jar"/>
@@ -49,7 +49,7 @@ A Wildfly 8.2 project for Entreprise integration
         <module name="javax.jms.api"/>
         <module name="javax.management.j2ee.api"/>
     </dependencies>
-</module>
+ </module>`
   
 * Ajouter de la configuration Standalone WildFly
 	** déclarer la connexion dans le subsystem resource-adapters.
