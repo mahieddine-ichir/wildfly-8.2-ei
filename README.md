@@ -8,11 +8,11 @@ A Wildfly 8.2 project for Entreprise integration
 - Creation du dossier $JBOSS_HOME/modules/system/layers/base/org/apache/activemq/main/
 - Copier le contenu de fichier rar dans le nouveau dossier
 	unzip activemq-rar-5.11.1.rar
-.. ce fichier rar contiens les differants jars pour le fonctionnement d'ActiveMQ RA
+..* ce fichier rar contiens les differants jars pour le fonctionnement d'ActiveMQ RA
 
 - Creation d'un fichier module.xml qui liste les differants fichiers contenu dans le dossier main.
-
-` <module xmlns="urn:jboss:module:1.3" name="org.apache.activemq" slot="main" >
+```xml
+ <module xmlns="urn:jboss:module:1.3" name="org.apache.activemq" slot="main" >
      <resources>
         <resource-root path="."/>
         <resource-root path="activemq-broker-5.11.1.jar"/>
@@ -49,20 +49,22 @@ A Wildfly 8.2 project for Entreprise integration
         <module name="javax.jms.api"/>
         <module name="javax.management.j2ee.api"/>
     </dependencies>
- </module>`
+ </module>
+ ```
   
 * Ajouter de la configuration Standalone WildFly
 	** déclarer la connexion dans le subsystem resource-adapters.
-	<subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
-		    <resource-adapters>
-		        <resource-adapter id="activemq-rar-5.11.1.rar">
-		            <module slot="main" id="org.apache.activemq"/>
-		            <transaction-support>NoTransaction</transaction-support>
-		            <config-property name="ServerUrl">tcp://localhost:61616</config-property>
-		            <config-property name="Password">admin</config-property>
-		 						<config-property name="UserName">admin</config-property>
-		            <connection-definitions>
-		                <connection-definition class-name="org.apache.activemq.ra.ActiveMQManagedConnectionFactory" jndi-name="java:/AMQConnectionFactory" enabled="true" use-java-context="true" pool-name="AMQConnectionFactory">
+```xml
+<subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
+	    <resource-adapters>
+	        <resource-adapter id="activemq-rar-5.11.1.rar">
+	            <module slot="main" id="org.apache.activemq"/>
+	            <transaction-support>NoTransaction</transaction-support>
+	            <config-property name="ServerUrl">tcp://localhost:61616</config-property>
+	            <config-property name="Password">admin</config-property>
+		<config-property name="UserName">admin</config-property>
+	           <connection-definitions>
+	                <connection-definition class-name="org.apache.activemq.ra.ActiveMQManagedConnectionFactory" jndi-name="java:/AMQConnectionFactory" enabled="true" use-java-context="true" pool-name="AMQConnectionFactory">
 		                <pool>
 		                   <min-pool-size>10</min-pool-size>
 		                   <max-pool-size>100</max-pool-size>
@@ -84,7 +86,7 @@ A Wildfly 8.2 project for Entreprise integration
 		        </resource-adapter>
 		    </resource-adapters>
 		</subsystem>
-		
+	```	
 
 - creation de queues
 
@@ -92,6 +94,7 @@ A Wildfly 8.2 project for Entreprise integration
 <hornetq-server>
 ...
 - Ajouter le queue d'echange avec ActiveMQ
+```xml
 	<jms-destinations>
 		<jms-queue name="JMSBridgeSourceQueue">
 		    <entry name=" java:/queue/JMSBridgeSourceQ "/>
@@ -105,8 +108,9 @@ A Wildfly 8.2 project for Entreprise integration
 		</jms-queue>
 	</jms-destinations>
 </hornetq-server>
-
+```
 - Ajouter un Bridge
+```xml
 <jms-bridge name="myBridge">
       <source>
         <connection-factory name=" AMQConnectionFactory "/>
@@ -122,7 +126,7 @@ A Wildfly 8.2 project for Entreprise integration
     <max-batch-size>10</max-batch-size>
     <max-batch-time>100</max-batch-time>
 </jms-bridge> 
-
+```
 
 2/ lancement de Broker ActiveMQ
 	- Telecharger le bin activemq 5.12
