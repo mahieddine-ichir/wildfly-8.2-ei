@@ -55,7 +55,7 @@ A Wildfly 8.2 project for Entreprise integration
  ```
   
 ## Ajouter de la configuration Standalone WildFly
-- déclarer la connexion dans le subsystem resource-adapters.
+- Déclarer la connexion dans le subsystem resource-adapters.
 
 ```xml 
 <subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
