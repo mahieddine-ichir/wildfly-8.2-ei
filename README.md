@@ -5,10 +5,12 @@ A Wildfly 8.2 project for Entreprise integration
 ## Installer un broker externe ActiveMQ RA
 
 - Télécharger le resource adapter d'ActiveMQ (version 5.11.1) et l'installer comme module dans WildFly
-- Creation du dossier $JBOSS_HOME/modules/system/layers/base/org/apache/activemq/main/
+- Creation du dossier `$JBOSS_HOME/modules/system/layers/base/org/apache/activemq/main/`
 - Copier le contenu de fichier rar dans le nouveau dossier
-	unzip activemq-rar-5.11.1.rar
-..* ce fichier rar contiens les differants jars pour le fonctionnement d'ActiveMQ RA
+```linux	
+			unzip activemq-rar-5.11.1.rar
+```
+> Le fichier rar contient les differants jars pour le bon fonctionnement d'ActiveMQ RA
 
 - Creation d'un fichier module.xml qui liste les differants fichiers contenu dans le dossier main.
 ```xml
@@ -56,45 +58,45 @@ A Wildfly 8.2 project for Entreprise integration
 	** déclarer la connexion dans le subsystem resource-adapters.
 ```xml
 <subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
-	    <resource-adapters>
-	        <resource-adapter id="activemq-rar-5.11.1.rar">
-	            <module slot="main" id="org.apache.activemq"/>
-	            <transaction-support>NoTransaction</transaction-support>
-	            <config-property name="ServerUrl">tcp://localhost:61616</config-property>
-	            <config-property name="Password">admin</config-property>
-		<config-property name="UserName">admin</config-property>
-	           <connection-definitions>
-	                <connection-definition class-name="org.apache.activemq.ra.ActiveMQManagedConnectionFactory" jndi-name="java:/AMQConnectionFactory" enabled="true" use-java-context="true" pool-name="AMQConnectionFactory">
-		                <pool>
-		                   <min-pool-size>10</min-pool-size>
-		                   <max-pool-size>100</max-pool-size>
-		                </pool>
-		                </connection-definition>
-		            </connection-definitions>
-		            <admin-objects>
-                        <admin-object class-name="org.apache.activemq.command.ActiveMQQueue" jndi-name="queue/JMSBridgeSourceQ" enabled="true" use-java-context="true" pool-name="source_queuet">  
-                            <config-property name="PhysicalName">  
-                                JMSBridgeSourceQ  
-                            </config-property>  
-                        </admin-object>  
- 		                        <admin-object class-name="org.apache.activemq.command.ActiveMQQueue" jndi-name="queue/JMSBridgeTargetQ" enabled="true" use-java-context="true" pool-name="target_queue">  
-		                            <config-property name="PhysicalName">  
-		                                JMSBridgeTargetQ  
-		                            </config-property>  
-		                        </admin-object>   
-		            </admin-objects>
-		        </resource-adapter>
-		    </resource-adapters>
-		</subsystem>
+	<resource-adapters>
+		<resource-adapter id="activemq-rar-5.11.1.rar">
+			<module slot="main" id="org.apache.activemq"/>
+			<transaction-support>NoTransaction</transaction-support>
+			<config-property name="ServerUrl">tcp://localhost:61616</config-property>
+			<config-property name="Password">admin</config-property>
+			<config-property name="UserName">admin</config-property>
+			<connection-definitions>
+			  <connection-definition class-name="org.apache.activemq.ra.ActiveMQManagedConnectionFactory" jndi-name="java:/AMQConnectionFactory" enabled="true" use-java-context="true" pool-name="AMQConnectionFactory">
+			    <pool>
+			       <min-pool-size>10</min-pool-size>
+			       <max-pool-size>100</max-pool-size>
+			    </pool>
+			    </connection-definition>
+			</connection-definitions>
+			<admin-objects>
+			    <admin-object class-name="org.apache.activemq.command.ActiveMQQueue" jndi-name="queue/JMSBridgeSourceQ" enabled="true" use-java-context="true" pool-name="source_queuet">  
+			        <config-property name="PhysicalName">  
+			            JMSBridgeSourceQ  
+			        </config-property>  
+			    </admin-object>  
+			        <admin-object class-name="org.apache.activemq.command.ActiveMQQueue" jndi-name="queue/JMSBridgeTargetQ" enabled="true" use-java-context="true" pool-name="target_queue">  
+			            <config-property name="PhysicalName">  
+			                JMSBridgeTargetQ  
+			            </config-property>  
+			        </admin-object>   
+			</admin-objects>
+		</resource-adapter>
+	</resource-adapters>
+</subsystem>
 	```	
 
 - creation de queues
+Commande JBOSS CLI !!!! TODO
 
-- Pour qu'un MDB, il faut ajouter un Bridge
-<hornetq-server>
-...
-- Ajouter le queue d'echange avec ActiveMQ
+- Ajouter le queue d'echange avec ActiveMQ et un Bridge pour eviter de modifier les MDB
 ```xml
+<hornetq-server>
+	...
 	<jms-destinations>
 		<jms-queue name="JMSBridgeSourceQueue">
 		    <entry name=" java:/queue/JMSBridgeSourceQ "/>
@@ -108,9 +110,6 @@ A Wildfly 8.2 project for Entreprise integration
 		</jms-queue>
 	</jms-destinations>
 </hornetq-server>
-```
-- Ajouter un Bridge
-```xml
 <jms-bridge name="myBridge">
       <source>
         <connection-factory name=" AMQConnectionFactory "/>
@@ -128,7 +127,7 @@ A Wildfly 8.2 project for Entreprise integration
 </jms-bridge> 
 ```
 
-2/ lancement de Broker ActiveMQ
+## lancement de Broker ActiveMQ
 	- Telecharger le bin activemq 5.12
 	- Extraire le contenu dans un dossier de travail
 	- Lancement de broker  %AMQ_DIR%/bin/activemq.bat start
