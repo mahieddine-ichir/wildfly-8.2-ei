@@ -69,7 +69,7 @@ Once the org.apache.activemq module has been created, the WildFly standalone con
 - Open standalone/configuration/standalone-full.xml configuration file (we need full server profile)
 - Add this snippet into the subsystem urn:jboss:domain:resource-adapters:2.0
 
-```
+```xml
 <subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
 	<resource-adapters>
 		<resource-adapter id="activemq-rar-5.11.1.rar">
@@ -128,7 +128,7 @@ Command JBOSS CLI !!!! TODO
 This queue has two JNDI names, to allow it to be accessed both internally (by the bridge) and externally (by our client).
 
 - The next step is to configure the bridge and the local queue. We edit the hornetq subsystem to add a JMS bridge after the definition of the hornetQ server.
-```
+```xml
 <jms-bridge name="myBridge">
       <source>
         <connection-factory name=" AMQConnectionFactory "/>
