@@ -1,18 +1,27 @@
-# wildfly-8.2-ei
-A Wildfly 8.2 project for Entreprise integration
+############# wildfly-8.2-ei
+#How to Use Out of Process ActiveMQ with WildFly
+This document explains how to use an out of process ActiveMQ to send and receive JMS messages inside WildFly Application Server.
 
+##Start standalone ActiveMQ
+This documentation assumes that ActiveMQ is started as a standalone application and listens on localhost:61616 to send and receive JMS messages.
 
-## Installer un broker externe ActiveMQ RA
-
-- Télécharger le resource adapter d'ActiveMQ (version 5.11.1) et l'installer comme module dans WildFly
-- Creation du dossier `$JBOSS_HOME/modules/system/layers/base/org/apache/activemq/main/`
-- Copier le contenu de fichier rar dans le nouveau dossier
-```linux	
-			unzip activemq-rar-5.11.1.rar
-```
-> Le fichier rar contient les differants jars pour le bon fonctionnement d'ActiveMQ RA
-
-- Creation d'un fichier module.xml qui liste les differantes fichiers contenu dans le dossier main.
+## Setup WildFly module for ActiveMQ RA
+ActiveMQ Resource Adaptater (RA) must be included and configured in WildFly application server
+- Download ActiveMQ resource adapter from http://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/5.11.1/activemq-rar-5.11.1.rar
+- Create a JBoss module containing the RA code.
+- Create the folder:`$JBOSS_HOME/modules/system/layers/base/org/apache/activemq/main/`
+	```
+	mkdir  -p $JBOSS_HOME/modules/org/apache/activemq/main/  
+	```
+- Copy all unpacked files of resource adapter to that folder, including the META-INF/ra.xml file.
+	```
+	cd modules/org/apache/activemq/main/  
+	wget http://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/5.11.1/activemq-rar-5.11.1.rar  
+	unzip activemq-rar-5.11.1.rar  
+	```
+	>The RAR archive contains many jars that are required to run ActiveMQ RA. It also contains the RA definition in META-INF/ra.xml
+	
+- Add module.xml file to the same folder with the following content:
 ```xml
  <module xmlns="urn:jboss:module:1.3" name="org.apache.activemq" slot="main" >
      <resources>
@@ -53,11 +62,14 @@ A Wildfly 8.2 project for Entreprise integration
     </dependencies>
  </module>
  ```
-  
-## Ajouter de la configuration Standalone WildFly
-- Déclarer la connexion dans le subsystem resource-adapters.
 
-```xml 
+## Setup WildFly standalone configuration
+Once the org.apache.activemq module has been created, the WildFly standalone configuration must be updated to use the ActiveMQ RA as the default resource adapters for message-driven beans
+
+- Open standalone/configuration/standalone-full.xml configuration file (we need full server profile)
+- Add this snippet into the subsystem urn:jboss:domain:resource-adapters:2.0
+
+```
 <subsystem xmlns="urn:jboss:domain:resource-adapters:2.0">
 	<resource-adapters>
 		<resource-adapter id="activemq-rar-5.11.1.rar">
@@ -89,14 +101,13 @@ A Wildfly 8.2 project for Entreprise integration
 		</resource-adapter>
 	</resource-adapters>
 </subsystem>
-```	
+	```	
 
-- Creation des queues JMS
-```javascript
-	Commande JBOSS CLI !!!! TODO
-```
+- Create Queues JMS
+Command JBOSS CLI !!!! TODO
 
-- Ajouter le queue d'echange avec ActiveMQ et un Bridge pour eviter de modifier les MDB
+- This creates a bridge that will use the connection factory called ConnectionFactory to consume from the local queue with the JNDI name queue/JMSBridgeSourceQ. It will then use the connection factory called AMQConnectionFactory (which is created by our resource adapter) to send the messages to the queue with the JNDI name queue/JMSBridgeTargetQ. This is mapped by our resource adapter to the remote ActiveMQ queue. We also need to create a local queue called JMSBridgeSourceQ in the jms-destinations section of the configuration.
+
 ```xml
 <hornetq-server>
 	...
@@ -113,6 +124,11 @@ A Wildfly 8.2 project for Entreprise integration
 		</jms-queue>
 	</jms-destinations>
 </hornetq-server>
+```
+This queue has two JNDI names, to allow it to be accessed both internally (by the bridge) and externally (by our client).
+
+- The next step is to configure the bridge and the local queue. We edit the hornetq subsystem to add a JMS bridge after the definition of the hornetQ server.
+```
 <jms-bridge name="myBridge">
       <source>
         <connection-factory name=" AMQConnectionFactory "/>
@@ -130,7 +146,15 @@ A Wildfly 8.2 project for Entreprise integration
 </jms-bridge> 
 ```
 
-## Lancement de Broker ActiveMQ
-- Telecharger le bin activemq 5.12
-- Extraire le contenu dans un dossier de travail
-- Lancement de broker `%AMQ_DIR%/bin/activemq.bat start`
+- Start JBoss AS with command
+``` 	bin/standalone.sh -c standalone-full.xml ```
+
+## ActiveMQ as an external messaging broker
+
+	- Download Apache ActiveMQ from 5.12 http://activemq.apache.org/activemq-5121-release.html
+	- Unpack the downloaded package
+	- Start the broker with
+	%AMQ_DIR%/bin/activemq.bat start
+	
+	
+## Configure JCA endpoint for MDB !!!
