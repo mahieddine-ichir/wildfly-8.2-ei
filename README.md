@@ -12,7 +12,7 @@ A Wildfly 8.2 project for Entreprise integration
 ```
 > Le fichier rar contient les differants jars pour le bon fonctionnement d'ActiveMQ RA
 
-- Creation d'un fichier module.xml qui liste les differants fichiers contenu dans le dossier main.
+- Creation d'un fichier module.xml qui liste les differantes fichiers contenu dans le dossier main.
 ```xml
  <module xmlns="urn:jboss:module:1.3" name="org.apache.activemq" slot="main" >
      <resources>
