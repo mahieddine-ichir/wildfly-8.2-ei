@@ -157,3 +157,4 @@ This queue has two JNDI names, to allow it to be accessed both internally (by th
 	
 	
 ## Configure JCA endpoint for MDB !!!
+TODO
